@@ -138,7 +138,11 @@ if(!current_user_can('inschrijvingen_cap_admin')) {
 			
 			<br class="clear" />
 			
-			<h3 class="title">Inschrijvingen<?php /* <a href="admin.php?page=inschrijvingen_beheer_exporteren" class="button-primary">Exporteren</a>*/?>
+			<?php
+			$inschrijvingen = inschrijvingen_admin_wedstrijd_inschrijvingen($_GET['id']);
+			?>
+			
+			<h3 class="title"><?php echo count($inschrijvingen); ?> Inschrijvingen<?php /* <a href="admin.php?page=inschrijvingen_beheer_exporteren" class="button-primary">Exporteren</a>*/?>
 			<script type="text/javascript">
 				if (window.print) {
 					document.write('<a href="admin-ajax.php?action=inschrijvingen_beheer_print_ajax&id=<?php echo $_GET['id']; ?>" class="button-primary" target="_blank">Print</a>');
@@ -147,7 +151,6 @@ if(!current_user_can('inschrijvingen_cap_admin')) {
 			</h3>
 			
 			<?php
-			$inschrijvingen = inschrijvingen_admin_wedstrijd_inschrijvingen($_GET['id']);
 			if($inschrijvingen) {
             ?>
 			
