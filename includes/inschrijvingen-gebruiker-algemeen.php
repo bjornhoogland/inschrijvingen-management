@@ -46,13 +46,7 @@ if(!current_user_can('inschrijvingen_cap_subs')) {
 			
 			<br class="clear" />
 			
-			<h3 class="title">Inschrijvingen Overzicht 2012
-			<script type="text/javascript">
-				if (window.print) {
-					document.write('<a href="admin-ajax.php?action=inschrijvingen_print_ajax" class="button-primary" target="_blank">Print</a>');
-				}
-			</script>
-			</h3>
+			<h3 id="overzicht-title" class="title">Inschrijvingen Overzicht 2012</h3>
 		
 			<p>
 				Hieronder staan alle NFF wedstrijden van dit jaar. Wil je meedoen aan een wedstrijd? Klik dan op aanmelden in de kolom onder de juiste klasse. Wil je daarna toch niet meedoen? Klik dan op afmelden.<br /><strong>Let op!</strong> Kostenloos afmelden kan niet meer na de sluitingsdatum.
@@ -87,13 +81,17 @@ if(!current_user_can('inschrijvingen_cap_subs')) {
 					</tr>
 				</tfoot>
 				<tbody id="the-list">
+					<tr id="pastButton" style="text-align:center;line-height:32px;display:none;">
+						<td colspan="7"><a href="javascript:showPast()" class="button">&uarr; Laat afgelopen wedstrijden zien &uarr;</a></td>
+					</tr>
 					<?php
 						$alternate = false;
 						foreach($wedstrijden as $wedstrijd) {
 							if($alternate) { $alternate = false; }else{ $alternate = true; }
 						?>
 						
-						<tr class='<?php if($alternate) echo "alternate ";?>format-default' valign="top">
+						<tr class='format-default <?php if($alternate) echo "alternate "; if($wedstrijd->wedstrijd_datum <= current_time('mysql', 0)) echo "past"; ?>' valign="top"
+						>
 							<td class="date column-date"><?php echo mysql2date('j F', $wedstrijd->wedstrijd_datum); ?></td>
 							<td><strong><?php echo $wedstrijd->wedstrijd_naam; ?></strong></td>
 							<td><?php echo $wedstrijd->wedstrijd_plaats; ?></td>
@@ -212,6 +210,22 @@ if(!current_user_can('inschrijvingen_cap_subs')) {
 				</tbody>
 			</table>
 			</div>
+			
+			<script type="text/javascript">
+				if (window.print) {
+					jQuery("#overzicht-title").append(' <a href="admin-ajax.php?action=inschrijvingen_print_ajax" class="button-primary" target="_blank">Print</a>');
+				}
+				
+				function showPast(){
+					jQuery("#pastButton").hide(100);
+					jQuery("tr.format-default").show(500);
+				}
+				
+				jQuery(document).ready(function() {
+					jQuery(".past").hide();
+					jQuery("#pastButton").show();
+				});
+			</script>
 	
 			<?php
 			}
