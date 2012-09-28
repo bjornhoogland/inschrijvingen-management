@@ -52,10 +52,13 @@ function inschrijvingen_beheer_ajax_print_cb(){
 			
 			<br class="clear" />
 			
-			<h3 class="title">Inschrijvingen</h3>
-			
 			<?php
 			$inschrijvingen = inschrijvingen_admin_wedstrijd_inschrijvingen($_GET['id']);
+			?>
+			
+			<h3 class="title"><?php echo count($inschrijvingen); ?> Inschrijvingen</h3>
+			
+			<?php
 			if($inschrijvingen) {
             ?>
 			
