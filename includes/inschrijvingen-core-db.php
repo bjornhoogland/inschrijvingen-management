@@ -33,6 +33,34 @@ function inschrijvingen_gebruiker_wedstrijd_lijst() {
     return $wedstrijd_lists;
 }
 
+/**
+ * Jaar van eerste wedstrijd in de db
+ * @global object $wpdb
+ * @global array $inschrijvingen_db_table_name
+ * @return mysql date
+ */
+function inschrijvingen_eerste_wedstrijd_datum() {
+	global $wpdb, $inschrijvingen_db_table_name;
+	
+	$datum = $wpdb->get_var($wpdb->prepare("SELECT min(`wedstrijd_datum`) FROM {$inschrijvingen_db_table_name['wedstrijden']}"));
+	
+	return $datum;
+}
+
+/**
+ * Jaar van laatste wedstrijd in de db
+ * @global object $wpdb
+ * @global array $inschrijvingen_db_table_name
+ * @return mysql date
+ */
+function inschrijvingen_laatste_wedstrijd_datum() {
+	global $wpdb, $inschrijvingen_db_table_name;
+	
+	$datum = $wpdb->get_var($wpdb->prepare("SELECT max(`wedstrijd_datum`) FROM {$inschrijvingen_db_table_name['wedstrijden']}"));
+	
+	return $datum;
+}
+
 function inschrijvingen_gebruiker_wedstrijd_verificatie($id, $type) {
 	global $wpdb, $inschrijvingen_db_table_name, $current_user; get_currentuserinfo();
 	

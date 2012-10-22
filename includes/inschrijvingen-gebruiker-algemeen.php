@@ -13,6 +13,9 @@ if(!current_user_can('inschrijvingen_cap_subs')) {
         case 'view' :
         	global $current_user; get_currentuserinfo();
         	$meta = get_user_meta($current_user->ID,'bmx_profiel_meta', true);
+        	
+        	//$year = (isset($_GET['year']))? $_GET['year'] : date('Y',current_time('timestamp',0));
+			$allRacesFinished = inschrijvingen_laatste_wedstrijd_datum() <= current_time('mysql',0);
         	?>
         	
         	<div class="wrap">
@@ -48,9 +51,15 @@ if(!current_user_can('inschrijvingen_cap_subs')) {
 			
 			<h3 id="overzicht-title" class="title">Inschrijvingen Overzicht 2012</h3>
 		
-			<p>
+			<div class="tablenav top">
 				Hieronder staan alle NFF wedstrijden van dit jaar. Wil je meedoen aan een wedstrijd? Klik dan op aanmelden in de kolom onder de juiste klasse. Wil je daarna toch niet meedoen? Klik dan op afmelden.<br /><strong>Let op!</strong> Kostenloos afmelden kan niet meer na de sluitingsdatum.
-			</p>
+				<div class="tablenav-pages">
+					<!--<a class="disabled" title="Ga naar het vorige jaar" href="admin.php?page=inschrijvingen_gebruiker&year=2012">‹</a>
+					Seizoen <strong>2012</strong>
+					<a title="Ga naar het volgende jaar" href="admin.php?page=inschrijvingen_gebruiker&year=2012">›</a>-->
+					&nbsp;
+				</div>
+			</div>
 			
 			<?php
 			$wedstrijden = inschrijvingen_gebruiker_wedstrijd_lijst();
@@ -81,16 +90,21 @@ if(!current_user_can('inschrijvingen_cap_subs')) {
 					</tr>
 				</tfoot>
 				<tbody id="the-list">
+					<?php 
+						if(!$allRacesFinished){
+					?>
 					<tr id="pastButton" style="text-align:center;line-height:32px;display:none;">
 						<td colspan="7"><a href="javascript:showPast()" class="button">&uarr; Laat afgelopen wedstrijden zien &uarr;</a></td>
 					</tr>
 					<?php
+						}
+						
 						$alternate = false;
 						foreach($wedstrijden as $wedstrijd) {
 							if($alternate) { $alternate = false; }else{ $alternate = true; }
 						?>
 						
-						<tr class='format-default <?php if($alternate) echo "alternate "; if($wedstrijd->wedstrijd_datum <= current_time('mysql', 0)) echo "past"; ?>' valign="top"
+						<tr class='format-default <?php if($alternate) echo "alternate "; if($wedstrijd->wedstrijd_datum <= current_time('mysql', 0) && !$allRacesFinished) echo "past"; ?>' valign="top"
 						>
 							<td class="date column-date"><?php echo mysql2date('j F', $wedstrijd->wedstrijd_datum); ?></td>
 							<td><strong><?php echo $wedstrijd->wedstrijd_naam; ?></strong></td>
