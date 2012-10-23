@@ -8,11 +8,11 @@ if ('inschrijvingen-core-db.php' == basename($_SERVER['SCRIPT_FILENAME']))
  * @global array $inschrijvingen_db_table_name
  * @return object lijst van rijen
  */
-function inschrijvingen_gebruiker_wedstrijd_lijst() {
+function inschrijvingen_gebruiker_wedstrijd_lijst($year) {
     global $wpdb, $inschrijvingen_db_table_name, $current_user; get_currentuserinfo();
     
     /** Get the basic list */
-    $wedstrijd_lists = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$inschrijvingen_db_table_name['wedstrijden']} ORDER BY wedstrijd_datum ASC"));
+    $wedstrijd_lists = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$inschrijvingen_db_table_name['wedstrijden']} WHERE YEAR(wedstrijd_datum) = %d ORDER BY wedstrijd_datum ASC", $year));
     
     /** Extend it for action */
     foreach($wedstrijd_lists as $wedstrijd_list) {

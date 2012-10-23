@@ -13,6 +13,8 @@ function inschrijvingen_gebruiker_ajax_print_cb(){
 	if(current_user_can('inschrijvingen_cap_subs')) {
         global $current_user; get_currentuserinfo();
         	$meta = get_user_meta($current_user->ID,'bmx_profiel_meta', true);
+        	
+        	$year = (isset($_GET['year']))? $_GET['year'] : date('Y',current_time('timestamp',0));
         	?>
         	
         	<div class="wrap">
@@ -46,10 +48,10 @@ function inschrijvingen_gebruiker_ajax_print_cb(){
 			
 			<br class="clear" />
 			
-			<h3 class="title">Inschrijvingen Overzicht 2012</h3>
+			<h3 class="title">Inschrijvingen Overzicht <?php echo $year; ?></h3>
 			
 			<?php
-			$wedstrijden = inschrijvingen_gebruiker_wedstrijd_lijst();
+			$wedstrijden = inschrijvingen_gebruiker_wedstrijd_lijst($year);
 			if($wedstrijden) {
             ?>
 			

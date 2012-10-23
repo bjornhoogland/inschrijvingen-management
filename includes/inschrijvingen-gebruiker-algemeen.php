@@ -14,8 +14,7 @@ if(!current_user_can('inschrijvingen_cap_subs')) {
         	global $current_user; get_currentuserinfo();
         	$meta = get_user_meta($current_user->ID,'bmx_profiel_meta', true);
         	
-        	//$year = (isset($_GET['year']))? $_GET['year'] : date('Y',current_time('timestamp',0));
-			$allRacesFinished = inschrijvingen_laatste_wedstrijd_datum() <= current_time('mysql',0);
+        	$year = (isset($_GET['year']))? $_GET['year'] : date('Y',current_time('timestamp',0));
         	?>
         	
         	<div class="wrap">
@@ -49,20 +48,24 @@ if(!current_user_can('inschrijvingen_cap_subs')) {
 			
 			<br class="clear" />
 			
-			<h3 id="overzicht-title" class="title">Inschrijvingen Overzicht 2012</h3>
+			<h3 id="overzicht-title" class="title">Inschrijvingen Overzicht <?php echo $year; ?></h3>
 		
 			<div class="tablenav top">
 				Hieronder staan alle NFF wedstrijden van dit jaar. Wil je meedoen aan een wedstrijd? Klik dan op aanmelden in de kolom onder de juiste klasse. Wil je daarna toch niet meedoen? Klik dan op afmelden.<br /><strong>Let op!</strong> Kostenloos afmelden kan niet meer na de sluitingsdatum.
 				<div class="tablenav-pages">
-					<!--<a class="disabled" title="Ga naar het vorige jaar" href="admin.php?page=inschrijvingen_gebruiker&year=2012">‹</a>
-					Seizoen <strong>2012</strong>
-					<a title="Ga naar het volgende jaar" href="admin.php?page=inschrijvingen_gebruiker&year=2012">›</a>-->
+					<?php if(mysql2date('Y',inschrijvingen_eerste_wedstrijd_datum()) < $year){$previousYear = $year - 1;} else { $previousYear = $year; $previousDisabled = true;} ?>
+					<a <?php if($previousDisabled){ echo "class=\"disabled\""; } ?>title="Ga naar het vorige jaar" href="admin.php?page=inschrijvingen_gebruiker&year=<?php echo $previousYear; ?>">‹</a>
+					Seizoen <strong><?php echo $year;?></strong>
+					<?php if(mysql2date('Y',inschrijvingen_laatste_wedstrijd_datum()) > $year){$nextYear = $year + 1;} else { $nextYear = $year; $nextDisabled = true;} ?>
+					<a <?php if($nextDisabled){ echo "class=\"disabled\""; } ?>title="Ga naar het volgende jaar" href="admin.php?page=inschrijvingen_gebruiker&year=<?php echo $nextYear; ?>">›</a>
 					&nbsp;
 				</div>
 			</div>
 			
+			<br class="clear" />
+			
 			<?php
-			$wedstrijden = inschrijvingen_gebruiker_wedstrijd_lijst();
+			$wedstrijden = inschrijvingen_gebruiker_wedstrijd_lijst($year);
 			if($wedstrijden) {
             ?>
 			
@@ -91,7 +94,7 @@ if(!current_user_can('inschrijvingen_cap_subs')) {
 				</tfoot>
 				<tbody id="the-list">
 					<?php 
-						if(!$allRacesFinished){
+						if($year == date('Y',current_time('timestamp',0))){
 					?>
 					<tr id="pastButton" style="text-align:center;line-height:32px;display:none;">
 						<td colspan="7"><a href="javascript:showPast()" class="button">&uarr; Laat afgelopen wedstrijden zien &uarr;</a></td>
@@ -104,7 +107,7 @@ if(!current_user_can('inschrijvingen_cap_subs')) {
 							if($alternate) { $alternate = false; }else{ $alternate = true; }
 						?>
 						
-						<tr class='format-default <?php if($alternate) echo "alternate "; if($wedstrijd->wedstrijd_datum <= current_time('mysql', 0) && !$allRacesFinished) echo "past"; ?>' valign="top"
+						<tr class='format-default <?php if($alternate) echo "alternate "; if($wedstrijd->wedstrijd_datum <= current_time('mysql', 0) && $year == date('Y',current_time('timestamp',0))){ echo "past"; } else { $yearHasUnfinishedRaces = true;} ?>' valign="top"
 						>
 							<td class="date column-date"><?php echo mysql2date('j F', $wedstrijd->wedstrijd_datum); ?></td>
 							<td><strong><?php echo $wedstrijd->wedstrijd_naam; ?></strong></td>
@@ -137,7 +140,7 @@ if(!current_user_can('inschrijvingen_cap_subs')) {
 												echo 'Gesloten';
 											} else {
 												?>
-												<span class='trash'><a href="admin.php?page=inschrijvingen_gebruiker&action=afmelden&item_id=<?php echo $wedstrijd->inschrijving_eigen_id; ?>" title="Afmelden voor deze wedstrijd.">Afmelden</a></span>
+												<span class='trash'><a href="admin.php?page=inschrijvingen_gebruiker<?php echo "&year=" . $year; ?>&action=afmelden&item_id=<?php echo $wedstrijd->inschrijving_eigen_id; ?>" title="Afmelden voor deze wedstrijd.">Afmelden</a></span>
 												<?php
 											}
 										}
@@ -146,7 +149,7 @@ if(!current_user_can('inschrijvingen_cap_subs')) {
 												echo 'Inschrijven</br>Gesloten';
 											} else {
 												?>
-												<a href="admin.php?page=inschrijvingen_gebruiker&action=inschrijven&item_id=<?php echo $wedstrijd->wedstrijd_ID; ?>&type=eigen" title="Aanmelden voor de eigen klasse." class="button-primary" style="line-height:32px">Inschrijven</a>
+												<a href="admin.php?page=inschrijvingen_gebruiker<?php echo "&year=" . $year; ?>&action=inschrijven&item_id=<?php echo $wedstrijd->wedstrijd_ID; ?>&type=eigen" title="Aanmelden voor de eigen klasse." class="button-primary" style="line-height:32px">Inschrijven</a>
 												<?php
 											}
 										}
@@ -167,7 +170,7 @@ if(!current_user_can('inschrijvingen_cap_subs')) {
 												echo 'Gesloten';
 											} else {
 												?>
-												<span class='trash'><a href="admin.php?page=inschrijvingen_gebruiker&action=afmelden&item_id=<?php echo $wedstrijd->inschrijving_cruiser_id; ?>" title="Afmelden voor deze wedstrijd.">Afmelden</a></span>
+												<span class='trash'><a href="admin.php?page=inschrijvingen_gebruiker<?php echo "&year=" . $year; ?>&action=afmelden&item_id=<?php echo $wedstrijd->inschrijving_cruiser_id; ?>" title="Afmelden voor deze wedstrijd.">Afmelden</a></span>
 												<?php
 											}
 										}
@@ -176,7 +179,7 @@ if(!current_user_can('inschrijvingen_cap_subs')) {
 												echo 'Inschrijven</br>Gesloten';
 											} else {
 												?>
-												<a href="admin.php?page=inschrijvingen_gebruiker&action=inschrijven&item_id=<?php echo $wedstrijd->wedstrijd_ID; ?>&type=cruiser" title="Aanmelden voor de cruiser klasse." class="button-primary" style="line-height:32px">Inschrijven</a>
+												<a href="admin.php?page=inschrijvingen_gebruiker<?php echo "&year=" . $year; ?>&action=inschrijven&item_id=<?php echo $wedstrijd->wedstrijd_ID; ?>&type=cruiser" title="Aanmelden voor de cruiser klasse." class="button-primary" style="line-height:32px">Inschrijven</a>
 												<?php
 											}
 										}
@@ -197,7 +200,7 @@ if(!current_user_can('inschrijvingen_cap_subs')) {
 												echo 'Gesloten';
 											} else {
 												?>
-												<span class='trash'><a href="admin.php?page=inschrijvingen_gebruiker&action=afmelden&item_id=<?php echo $wedstrijd->inschrijving_promotie_id; ?>" title="Afmelden voor deze wedstrijd.">Afmelden</a></span>
+												<span class='trash'><a href="admin.php?page=inschrijvingen_gebruiker<?php echo "&year=" . $year; ?>&action=afmelden&item_id=<?php echo $wedstrijd->inschrijving_promotie_id; ?>" title="Afmelden voor deze wedstrijd.">Afmelden</a></span>
 												<?php
 											}
 										}
@@ -206,7 +209,7 @@ if(!current_user_can('inschrijvingen_cap_subs')) {
 												echo 'Inschrijven</br>Gesloten';
 											} else {
 												?>
-												<a href="admin.php?page=inschrijvingen_gebruiker&action=inschrijven&item_id=<?php echo $wedstrijd->wedstrijd_ID; ?>&type=promotie" title="Aanmelden voor de promotieklasse." class="button-primary" style="line-height:32px">Inschrijven</a>
+												<a href="admin.php?page=inschrijvingen_gebruiker<?php echo "&year=" . $year; ?>&action=inschrijven&item_id=<?php echo $wedstrijd->wedstrijd_ID; ?>&type=promotie" title="Aanmelden voor de promotieklasse." class="button-primary" style="line-height:32px">Inschrijven</a>
 												<?php
 											}
 										}
@@ -227,8 +230,10 @@ if(!current_user_can('inschrijvingen_cap_subs')) {
 			
 			<script type="text/javascript">
 				if (window.print) {
-					jQuery("#overzicht-title").append(' <a href="admin-ajax.php?action=inschrijvingen_print_ajax" class="button-primary" target="_blank">Print</a>');
+					jQuery("#overzicht-title").append(' <a href="admin-ajax.php?action=inschrijvingen_print_ajax<?php echo "&year=" . $year; ?>" class="button-primary" target="_blank">Print</a>');
 				}
+				
+				<?php if($yearHasUnfinishedRaces){?>
 				
 				function showPast(){
 					jQuery("#pastButton").hide(100);
@@ -239,6 +244,9 @@ if(!current_user_can('inschrijvingen_cap_subs')) {
 					jQuery(".past").hide();
 					jQuery("#pastButton").show();
 				});
+				
+				<?php } ?>
+				
 			</script>
 	
 			<?php
