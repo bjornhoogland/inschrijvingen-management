@@ -14,15 +14,30 @@ if(!current_user_can('inschrijvingen_cap_admin')) {
         default:
         case 'view' :
         	if(!isset($_GET['id'])) {
+        		$year = (isset($_GET['year']))? $_GET['year'] : date('Y',current_time('timestamp',0));
             	?>
         
-			<?php //<div id="icon-wedstrijd" class="icon32"><br /></div>?>
-			<h2>
-				Wedstrijden Overzicht<?php // <a href="admin.php?page=inschrijvingen_beheer_toevoegen" class="add-new-h2">Nieuwe toevoegen</a>?>
-			</h2>
+			<div class="tablenav top">
+				
+				<?php //<div id="icon-wedstrijd" class="icon32"><br /></div>?>
+				<h2>
+					Wedstrijden Overzicht <?php echo $year; // <a href="admin.php?page=inschrijvingen_beheer_toevoegen" class="add-new-h2">Nieuwe toevoegen</a>?>
+					
+					<div class="tablenav-pages">
+						<?php if(mysql2date('Y',inschrijvingen_eerste_wedstrijd_datum()) < $year){$previousYear = $year - 1;} else { $previousYear = $year; $previousDisabled = true;} ?>
+						<a <?php if($previousDisabled){ echo "class=\"disabled\""; } ?>title="Ga naar het vorige jaar" href="admin.php?page=inschrijvingen_beheer&year=<?php echo $previousYear; ?>">‹</a>
+						Seizoen <strong><?php echo $year;?></strong>
+						<?php if(mysql2date('Y',inschrijvingen_laatste_wedstrijd_datum()) > $year){$nextYear = $year + 1;} else { $nextYear = $year; $nextDisabled = true;} ?>
+						<a <?php if($nextDisabled){ echo "class=\"disabled\""; } ?>title="Ga naar het volgende jaar" href="admin.php?page=inschrijvingen_beheer&year=<?php echo $nextYear; ?>">›</a>
+						&nbsp;
+					</div>
+				</h2>
+			</div>
+			
+			<br class="clear" />
 		
 			<?php
-			$wedstrijden = inschrijvingen_admin_wedstrijd_lijst();
+			$wedstrijden = inschrijvingen_admin_wedstrijd_lijst($year);
 			if($wedstrijden) {
             ?>
             

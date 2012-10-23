@@ -3,7 +3,7 @@
 Plugin Name: Inschrijvingen Management
 Description: Plugin voor het beheren van wedstrijden en het inschrijven voor de wedstrijden.
 Author: Bjorn Hoogland
-Version: 0.3.4
+Version: 0.3.5
 */
 
 if ('inschrijvingen-management.php' == basename($_SERVER['SCRIPT_FILENAME']))
