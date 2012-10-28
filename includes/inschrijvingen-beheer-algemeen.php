@@ -10,31 +10,27 @@ if(!current_user_can('inschrijvingen_cap_admin')) {
 
 	<?php
     $action = (isset($_GET['action']))? $_GET['action'] : 'view';
-    switch($pmode) {
+    switch($action) {
         default:
         case 'view' :
         	if(!isset($_GET['id'])) {
         		$year = (isset($_GET['year']))? $_GET['year'] : date('Y',current_time('timestamp',0));
             	?>
         
-			<div class="tablenav top">
-				
-				<?php //<div id="icon-wedstrijd" class="icon32"><br /></div>?>
-				<h2>
-					Wedstrijden Overzicht <?php echo $year; // <a href="admin.php?page=inschrijvingen_beheer_toevoegen" class="add-new-h2">Nieuwe toevoegen</a>?>
-					
-					<div class="tablenav-pages">
-						<?php if(mysql2date('Y',inschrijvingen_eerste_wedstrijd_datum()) < $year){$previousYear = $year - 1;} else { $previousYear = $year; $previousDisabled = true;} ?>
-						<a <?php if($previousDisabled){ echo "class=\"disabled\""; } ?>title="Ga naar het vorige jaar" href="admin.php?page=inschrijvingen_beheer&year=<?php echo $previousYear; ?>">‹</a>
-						Seizoen <strong><?php echo $year;?></strong>
-						<?php if(mysql2date('Y',inschrijvingen_laatste_wedstrijd_datum()) > $year){$nextYear = $year + 1;} else { $nextYear = $year; $nextDisabled = true;} ?>
-						<a <?php if($nextDisabled){ echo "class=\"disabled\""; } ?>title="Ga naar het volgende jaar" href="admin.php?page=inschrijvingen_beheer&year=<?php echo $nextYear; ?>">›</a>
-						&nbsp;
-					</div>
-				</h2>
+			<?php //<div id="icon-wedstrijd" class="icon32"><br /></div>?>
+			<h2>
+				Wedstrijden Overzicht <?php echo $year; ?> <a href="admin.php?page=inschrijvingen_beheer&action=new" class="add-new-h2">Nieuwe toevoegen</a>
+			</h2>
+			<div class="tablenav top" style="position:absolute;top:8px;right:23px;">
+				<div class="tablenav-pages">
+					<?php if(mysql2date('Y',inschrijvingen_eerste_wedstrijd_datum()) < $year){$previousYear = $year - 1;} else { $previousYear = $year; $previousDisabled = true;} ?>
+					<a <?php if($previousDisabled){ echo "class=\"disabled\""; } ?>title="Ga naar het vorige jaar" href="admin.php?page=inschrijvingen_beheer&year=<?php echo $previousYear; ?>">‹</a>
+					Seizoen <strong><?php echo $year;?></strong>
+					<?php if(mysql2date('Y',inschrijvingen_laatste_wedstrijd_datum()) > $year){$nextYear = $year + 1;} else { $nextYear = $year; $nextDisabled = true;} ?>
+					<a <?php if($nextDisabled){ echo "class=\"disabled\""; } ?>title="Ga naar het volgende jaar" href="admin.php?page=inschrijvingen_beheer&year=<?php echo $nextYear; ?>">›</a>
+					&nbsp;
+				</div>
 			</div>
-			
-			<br class="clear" />
 		
 			<?php
 			$wedstrijden = inschrijvingen_admin_wedstrijd_lijst($year);
@@ -70,13 +66,13 @@ if(!current_user_can('inschrijvingen_cap_admin')) {
 						<tr class='<?php if($alternate) echo "alternate ";?>format-default' valign="top">
 							<td class="date column-date"><?php echo mysql2date('j F', $wedstrijd->wedstrijd_datum); ?></td>
 							<td>
-								<strong><a class="row-title" href="admin.php?page=inschrijvingen_beheer&amp;id=<?php echo $wedstrijd->wedstrijd_ID; ?>&amp;action=view" title="Bekijk &#8220;<?php echo $wedstrijd->wedstrijd_naam; ?>&#8221;"><?php echo $wedstrijd->wedstrijd_naam; ?></a></strong>
+								<strong><a class="row-title" href="admin.php?page=inschrijvingen_beheer&amp;id=<?php echo $wedstrijd->wedstrijd_ID; ?>&amp;action=view" title="Bekijk &#8220;<?php echo esc_html($wedstrijd->wedstrijd_naam); ?>&#8221;"><?php echo esc_html($wedstrijd->wedstrijd_naam); ?></a></strong>
 								<?php/*<div class="row-actions">
 									<span class='edit'><a href="admin.php?page=inschrijvingen_beheer&amp;id=0&amp;action=edit" title="Deze wedstrijd bewerken">Bewerken</a> | </span>
 									<span class='trash'><a class='submitdelete' title='Deze wedstrijd verwijderen.' href='admin.php?page=inschrijvingen_beheer&amp;id=0&amp;action=delete'>Verwijderen</a></span>
 								</div>*/?>
 							</td>
-							<td><?php echo $wedstrijd->wedstrijd_plaats; ?></td>
+							<td><?php echo esc_html($wedstrijd->wedstrijd_plaats); ?></td>
 							<td>
 								<?php
 									if($wedstrijd->wedstrijd_sluiting !== '0000-00-00 00:00:00'){
@@ -119,28 +115,34 @@ if(!current_user_can('inschrijvingen_cap_admin')) {
 			
 				<?php //<div id="icon-wedstrijd" class="icon32"><br /></div>?>
 				<h2>
-					<?php echo $wedstrijd->wedstrijd_naam; ?>
+					<?php echo esc_html($wedstrijd->wedstrijd_naam); ?>
 				</h2>
 			
-				<?php/*<ul class='subsubsub'>
-					<li><a href="admin.php?page=inschrijvingen_beheer&amp;id=0&amp;action=view" title="Deze wedstrijd bekijken" class="current">Bekijken</a> |</li>
-					<li><a href="admin.php?page=inschrijvingen_beheer&amp;id=0&amp;action=edit" title="Deze wedstrijd bewerken">Bewerken</a> |</li>
-					<li><a class='trash' title='Deze wedstrijd verwijderen.' href='admin.php?page=inschrijvingen_beheer&amp;id=0&amp;action=delete'>Verwijderen</a></li>
-				</ul>*/?>
+				<ul class='subsubsub'>
+					<li><a href="admin.php?page=inschrijvingen_beheer&amp;id=<?php echo $_GET['id']; ?>&amp;action=view" title="Deze wedstrijd bekijken" class="current">Bekijken</a> |</li>
+					<li><a href="admin.php?page=inschrijvingen_beheer&amp;id=<?php echo $_GET['id']; ?>&amp;action=edit" title="Deze wedstrijd bewerken">Bewerken</a> |</li>
+					<li><a class='trash' title='Deze wedstrijd verwijderen.' href='admin.php?page=inschrijvingen_beheer&amp;id=<?php echo $_GET['id']; ?>&amp;action=delete'>Verwijderen</a></li>
+				</ul>
 			
 			<table class="wp-list-table widefat fixed posts" cellspacing="0">
 				<tr class='format-default iedit' valign="top">
-					<td style="width:25%">
+					<td style="width:20%">
 						<span class="description"><i>Wedstrijddatum:</i></span><br />
 						<?php echo mysql2date('j F Y', $wedstrijd->wedstrijd_datum); ?></td>
-					<td style="width:25%"><span class="description"><i>Plaats:</i></span><br /><?php echo $wedstrijd->wedstrijd_plaats; ?></td>
-					<td style="width:25%"><span class="description"><i>Sluiting van inschrijving:</i></span><br />
+					<td style="width:20%"><span class="description"><i>Wedstrijdplaats:</i></span><br /><?php echo esc_html($wedstrijd->wedstrijd_plaats); ?></td>
+					<td style="width:20%"><span class="description"><i>Sluiting van inschrijving:</i></span><br />
 						<?php
 							if($wedstrijd->wedstrijd_sluiting !== '0000-00-00 00:00:00'){
 								echo mysql2date('j F Y', $wedstrijd->wedstrijd_sluiting);
 							}
 						?></td>
-					<td style="width:25%"><span class="description"><i>Status:</i></span><br />
+					<td style="width:20%"><span class="description"><i>Klassen:</i></span><br />
+						<?php if($wedstrijd->wedstrijd_eigen_deelname) echo "20\""; ?>
+						<?php if($wedstrijd->wedstrijd_eigen_deelname && $wedstrijd->wedstrijd_cruiser_deelname) echo " / "; ?>
+						<?php if($wedstrijd->wedstrijd_cruiser_deelname) echo "Cruiser"; ?>
+						<?php if($wedstrijd->wedstrijd_cruiser_deelname && $wedstrijd->wedstrijd_promotie_deelname) echo " / "; ?>
+						<?php if($wedstrijd->wedstrijd_promotie_deelname) echo "Promotie"; ?></td>
+					<td style="width:20%"><span class="description"><i>Status:</i></span><br />
 						<?php
 							if($wedstrijd->wedstrijd_sluiting <= current_time('mysql', 0)){
 								echo "Inschrijving gesloten";
@@ -226,6 +228,78 @@ if(!current_user_can('inschrijvingen_cap_admin')) {
             	<?php
             }
 		}
+		break;
+		case 'new':
+			include (plugin_dir_path(WP_INSCHRIJVINGEN_ABSFILE) . 'includes/inschrijvingen-beheer-wedstrijd-toevoegen.php');
+		break;
+		case 'edit':
+			include (plugin_dir_path(WP_INSCHRIJVINGEN_ABSFILE) . 'includes/inschrijvingen-beheer-wedstrijd-bewerken.php');
+		break;
+		case 'delete':
+			if(!isset($_GET['id'])) {
+				?>
+				<div class="error"><p><strong>Verkeerde URL! Probeer het nog eens met de knoppen.</strong></p></div>
+				<?php
+			} else {
+				if($_SERVER['REQUEST_METHOD'] == 'POST') {
+					$wedstrijd = inschrijvingen_wedstrijd_details($_GET['id']);
+					if($wedstrijd) {
+						$inschrijvingen = inschrijvingen_admin_wedstrijd_inschrijvingen($_GET['id']);
+						
+						global $inschrijvingen_db_table_name, $wpdb;
+						
+						/* Verwijder de inschrijvingen voor deze wedstrijd */
+		                if($wpdb->query($wpdb->prepare("DELETE FROM $inschrijvingen_db_table_name[reg_tabel] WHERE wedstrijd_id = %d", $_POST['id']))) {
+		                    $message = count($inschrijvingen) . " Inschrijvingen voor deze wedstrijd zijn verwijderd.";
+		                }
+		                else {
+		                    $message = "Er waren geen inschrijvingen voor deze wedstrijd.";
+		                }
+						
+						/* Verwijder deze wedstrijd */
+						$sql = $wpdb->prepare("DELETE FROM $inschrijvingen_db_table_name[wedstrijden] WHERE wedstrijd_ID=%d", $_POST['id']);
+	                
+		                if($wpdb->query($sql)) {
+		                    ?>
+		                    <div id="message" class="updated"><p><strong>Wedstrijd "<?php echo esc_html($wedstrijd->wedstrijd_naam); ?>" is verwijderd.</strong><br /><?php echo $message; ?></p></div>
+		                    <?php
+		                }
+		                else {
+		                    ?>
+		                    <div class="error fade">Could not delete! Please check database.</div>
+		                    <?php
+		                    ?><div class="error"><p><strong>Wedstrijd kan niet worden verwijderd! Controleer de database.</strong><br /><?php echo $message; ?></p></div><?php
+		                }
+		                
+		                // show overzicht pagina
+		                $_GET['action'] = 'view';
+						$_GET['id'] = null;
+	           			include (plugin_dir_path(WP_INSCHRIJVINGEN_ABSFILE) . 'includes/inschrijvingen-beheer-algemeen.php');
+           			}
+				
+				} else {
+					$wedstrijd = inschrijvingen_wedstrijd_details($_GET['id']);
+					if($wedstrijd) {
+						$inschrijvingen = inschrijvingen_admin_wedstrijd_inschrijvingen($_GET['id']);
+						?>
+				    	<div id="message" class="updated">
+				        	<p>
+				        		<strong>Weet je zeker dat je wedstrijd "<?php echo esc_html($wedstrijd->wedstrijd_naam); ?>" wilt verwijderen?</strong><br /><?php echo count($inschrijvingen); ?> Inschrijvingen worden ook verwijderd.<br />
+				        	</p>
+				        			
+			        		<form action="" method="post">
+								<input type="hidden" name="id" id="id" value="<?php echo $wedstrijd->wedstrijd_ID; ?>" />
+			        			<p class="submit"><input type="submit" name="submit" id="submit" class="button-primary" value="Wedstrijd verwijderen" /> <a href="admin.php?page=inschrijvingen_beheer&id=<?php echo $wedstrijd->wedstrijd_ID; ?>&action=view">Annuleren</a></p>
+							</form>
+				        	
+				    	</div>
+			    		<?php
+			    		// show normale wedstrijdview
+			    		$_GET['action'] = 'view';
+           				include (plugin_dir_path(WP_INSCHRIJVINGEN_ABSFILE) . 'includes/inschrijvingen-beheer-algemeen.php');
+			    	}
+		    	}
+			}
 		break;
 	}
 	?>

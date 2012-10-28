@@ -107,8 +107,7 @@ if(!current_user_can('inschrijvingen_cap_subs')) {
 							if($alternate) { $alternate = false; }else{ $alternate = true; }
 						?>
 						
-						<tr class='format-default <?php if($alternate) echo "alternate "; if($wedstrijd->wedstrijd_datum <= current_time('mysql', 0) && $year == date('Y',current_time('timestamp',0))){ echo "past"; } else { $yearHasUnfinishedRaces = true;} ?>' valign="top"
-						>
+						<tr class='format-default <?php if($alternate) echo "alternate "; if($wedstrijd->wedstrijd_datum <= current_time('mysql', 0) && $year == date('Y',current_time('timestamp',0))){ echo "past"; } else { $yearHasUnfinishedRaces = true;} ?>' valign="top">
 							<td class="date column-date"><?php echo mysql2date('j F', $wedstrijd->wedstrijd_datum); ?></td>
 							<td><strong><?php echo $wedstrijd->wedstrijd_naam; ?></strong></td>
 							<td><?php echo $wedstrijd->wedstrijd_plaats; ?></td>
