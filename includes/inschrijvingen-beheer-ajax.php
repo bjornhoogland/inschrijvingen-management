@@ -16,16 +16,9 @@ function inschrijvingen_beheer_ajax_print_cb(){
 			if($wedstrijd) {
             	?>
 			
-				<?php //<div id="icon-wedstrijd" class="icon32"><br /></div>?>
 				<h2>
 					<?php echo $wedstrijd->wedstrijd_naam; ?>
 				</h2>
-			
-				<?php/*<ul class='subsubsub'>
-					<li><a href="admin.php?page=inschrijvingen_beheer&amp;id=0&amp;action=view" title="Deze wedstrijd bekijken" class="current">Bekijken</a> |</li>
-					<li><a href="admin.php?page=inschrijvingen_beheer&amp;id=0&amp;action=edit" title="Deze wedstrijd bewerken">Bewerken</a> |</li>
-					<li><a class='trash' title='Deze wedstrijd verwijderen.' href='admin.php?page=inschrijvingen_beheer&amp;id=0&amp;action=delete'>Verwijderen</a></li>
-				</ul>*/?>
 			
 			<table class="wp-list-table widefat fixed posts" cellspacing="0">
 				<tr class='format-default iedit' valign="top">
@@ -67,7 +60,6 @@ function inschrijvingen_beheer_ajax_print_cb(){
 					<tr>
 						<th scope="col" class='manage-column' style="text-align:left;width:21%">Stuurbordnummer</th>
 						<th scope="col" class='manage-column' style="text-align:left;width:24%">Naam</th>
-						<?php/*<th scope="col" class='manage-column' style="text-align:left;width:20%">Inschrijfdatum</th>*/?>
 						<th scope="col" class='manage-column' style="text-align:left;width:20%">Licentienummer</th>
 						<th scope="col" class='manage-column' style="text-align:left;width:15%">Klasse</th>
 					</tr>
@@ -76,7 +68,6 @@ function inschrijvingen_beheer_ajax_print_cb(){
 					<tr>
 						<th scope="col" class='manage-column' style="text-align:left;border-top:1px solid black">Stuurbordnummer</th>
 						<th scope="col" class='manage-column' style="text-align:left;border-top:1px solid black">Naam</th>
-						<?php/*<th scope="col" class='manage-column' style="text-align:left;border-top:1px solid black">Inschrijfdatum</th>*/?>
 						<th scope="col" class='manage-column' style="text-align:left;border-top:1px solid black">Licentienummer</th>
 						<th scope="col" class='manage-column' style="text-align:left;border-top:1px solid black">Klasse</th>
 					</tr>
@@ -91,7 +82,6 @@ function inschrijvingen_beheer_ajax_print_cb(){
 						<tr class='<?php if($alternate) echo "alternate ";?>format-default' valign="top">
 							<td style="border-top:1px solid black"><?php echo $inschrijving->stuurbord; ?>&nbsp;</td>
 							<td style="border-top:1px solid black"><?php echo $inschrijving->username; ?>&nbsp;</td>
-							<?php/*<td style="border-top:1px solid black"><?php echo mysql2date('j F', $inschrijving->inschrijving_datum); ?>&nbsp;</td>*/?>
 							<td style="border-top:1px solid black"><?php echo $inschrijving->licentie; ?>&nbsp;</td>
 							<td style="border-top:1px solid black"><?php echo $inschrijving->klasse; ?>&nbsp;</td>
 						</tr>

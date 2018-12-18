@@ -42,7 +42,7 @@ function inschrijvingen_gebruiker_wedstrijd_lijst($year) {
 function inschrijvingen_eerste_wedstrijd_datum() {
 	global $wpdb, $inschrijvingen_db_table_name;
 	
-	$datum = $wpdb->get_var($wpdb->prepare("SELECT min(`wedstrijd_datum`) FROM {$inschrijvingen_db_table_name['wedstrijden']}"));
+	$datum = $wpdb->get_var("SELECT min(`wedstrijd_datum`) FROM {$inschrijvingen_db_table_name['wedstrijden']}");
 	
 	return $datum;
 }
@@ -56,7 +56,7 @@ function inschrijvingen_eerste_wedstrijd_datum() {
 function inschrijvingen_laatste_wedstrijd_datum() {
 	global $wpdb, $inschrijvingen_db_table_name;
 	
-	$datum = $wpdb->get_var($wpdb->prepare("SELECT max(`wedstrijd_datum`) FROM {$inschrijvingen_db_table_name['wedstrijden']}"));
+	$datum = $wpdb->get_var("SELECT max(`wedstrijd_datum`) FROM {$inschrijvingen_db_table_name['wedstrijden']}");
 	
 	return $datum;
 }

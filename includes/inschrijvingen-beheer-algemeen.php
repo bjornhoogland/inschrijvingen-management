@@ -17,16 +17,15 @@ if(!current_user_can('inschrijvingen_cap_admin')) {
         		$year = (isset($_GET['year']))? $_GET['year'] : date('Y',current_time('timestamp',0));
             	?>
         
-			<?php //<div id="icon-wedstrijd" class="icon32"><br /></div>?>
 			<h2>
 				Wedstrijden Overzicht <?php echo $year; ?> <a href="admin.php?page=inschrijvingen_beheer&action=new" class="add-new-h2">Nieuwe toevoegen</a>
 			</h2>
 			<div class="tablenav top" style="position:absolute;top:8px;right:23px;">
 				<div class="tablenav-pages">
-					<?php if(mysql2date('Y',inschrijvingen_eerste_wedstrijd_datum()) < $year){$previousYear = $year - 1;} else { $previousYear = $year; $previousDisabled = true;} ?>
+					<?php if(mysql2date('Y',inschrijvingen_eerste_wedstrijd_datum()) < $year){$previousYear = $year - 1; $previousDisabled = false;} else { $previousYear = $year; $previousDisabled = true;} ?>
 					<a <?php if($previousDisabled){ echo "class=\"disabled\""; } ?>title="Ga naar het vorige jaar" href="admin.php?page=inschrijvingen_beheer&year=<?php echo $previousYear; ?>">‹</a>
 					Seizoen <strong><?php echo $year;?></strong>
-					<?php if(mysql2date('Y',inschrijvingen_laatste_wedstrijd_datum()) > $year){$nextYear = $year + 1;} else { $nextYear = $year; $nextDisabled = true;} ?>
+					<?php if(mysql2date('Y',inschrijvingen_laatste_wedstrijd_datum()) > $year){$nextYear = $year + 1; $nextDisabled = false;} else { $nextYear = $year; $nextDisabled = true;} ?>
 					<a <?php if($nextDisabled){ echo "class=\"disabled\""; } ?>title="Ga naar het volgende jaar" href="admin.php?page=inschrijvingen_beheer&year=<?php echo $nextYear; ?>">›</a>
 					&nbsp;
 				</div>
@@ -67,10 +66,6 @@ if(!current_user_can('inschrijvingen_cap_admin')) {
 							<td class="date column-date"><?php echo mysql2date('j F', $wedstrijd->wedstrijd_datum); ?></td>
 							<td>
 								<strong><a class="row-title" href="admin.php?page=inschrijvingen_beheer&amp;id=<?php echo $wedstrijd->wedstrijd_ID; ?>&amp;action=view" title="Bekijk &#8220;<?php echo esc_html($wedstrijd->wedstrijd_naam); ?>&#8221;"><?php echo esc_html($wedstrijd->wedstrijd_naam); ?></a></strong>
-								<?php/*<div class="row-actions">
-									<span class='edit'><a href="admin.php?page=inschrijvingen_beheer&amp;id=0&amp;action=edit" title="Deze wedstrijd bewerken">Bewerken</a> | </span>
-									<span class='trash'><a class='submitdelete' title='Deze wedstrijd verwijderen.' href='admin.php?page=inschrijvingen_beheer&amp;id=0&amp;action=delete'>Verwijderen</a></span>
-								</div>*/?>
 							</td>
 							<td><?php echo esc_html($wedstrijd->wedstrijd_plaats); ?></td>
 							<td>

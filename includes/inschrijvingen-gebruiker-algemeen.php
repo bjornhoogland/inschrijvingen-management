@@ -19,7 +19,6 @@ if(!current_user_can('inschrijvingen_cap_subs')) {
         	
         	<div class="wrap">
         	
-			<?php //<div id="icon-wedstrijd" class="icon32"><br /></div>?>
 			<h2>
 				<?php echo $current_user->display_name; ?>
 			</h2>
@@ -34,15 +33,11 @@ if(!current_user_can('inschrijvingen_cap_subs')) {
 			
 			<table class="wp-list-table widefat fixed posts" cellspacing="0">
 				<tr class='format-default iedit' valign="top">
-					<?php /*<td style="width:15%">
-						<span class="description">Geboortedatum:</span><br />
-						<abbr title="4 juli 2012">4 juli 2012</abbr></td>*/ ?>
 					<td style="width:15%"><span class="description"><i>Geslacht:</i></span><br /><?php echo $meta["bmx_Geslacht"]; ?></td>
 					<td style="width:18%"><span class="description"><i>Geboortedatum:</i></span><br />
 					<?php echo $meta["bmx_Geboortedag"] . ' ' . $meta["bmx_Geboortemaand"] . ' ' . $meta["bmx_Geboortejaar"]; ?></td>
 					<td style="width:18%"><span class="description"><i>Stuurbordnummer:</i></span><br /><?php echo $meta["bmx_Stuurbordnummer"]; ?></td>
 					<td style="width:34%"><span class="description"><i>NFF licentienummer:</i></span><br /><?php echo $meta["bmx_Licentienummer"]; ?></td>
-					<?php//<td style="width:34%"><span class="description">BMX gegevens wijzigen:</span><br /><a href="profile.php#BMX" title="Profiel wijzigen">Ga naar je profiel</a></td>?>
 				</tr>
 			</table>
 			
@@ -111,16 +106,6 @@ if(!current_user_can('inschrijvingen_cap_subs')) {
 							<td class="date column-date"><?php echo mysql2date('j F', $wedstrijd->wedstrijd_datum); ?></td>
 							<td><strong><?php echo $wedstrijd->wedstrijd_naam; ?></strong></td>
 							<td><?php echo $wedstrijd->wedstrijd_plaats; ?></td>
-							<?php/*<td>
-								<?php
-								if($wedstrijd->wedstrijd_kosten == -1.00)
-									echo 'Onbekend';
-								elseif($wedstrijd->wedstrijd_kosten == 0.00)
-									echo 'Gratis';
-								else
-									echo $wedstrijd->wedstrijd_kosten . ' Euro';
-								?>
-							</td>*/?>
 							<td>
 								<?php
 									if($wedstrijd->wedstrijd_sluiting !== '0000-00-00 00:00:00'){
@@ -153,9 +138,6 @@ if(!current_user_can('inschrijvingen_cap_subs')) {
 											}
 										}
 									}
-									else {
-										//echo "-";
-									}
 								?>
 							</td>
 							<td>
@@ -183,9 +165,6 @@ if(!current_user_can('inschrijvingen_cap_subs')) {
 											}
 										}
 									}
-									else {
-										//echo "-";
-									}
 								?>
 							</td>
 							<td>
@@ -212,9 +191,6 @@ if(!current_user_can('inschrijvingen_cap_subs')) {
 												<?php
 											}
 										}
-									}
-									else {
-										//echo "-";
 									}
 								?>
 							</td>
